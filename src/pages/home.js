@@ -1,13 +1,33 @@
 import React from 'react';
-import { useQuery } from '@apollo/client';
+import { useQuery, gql } from '@apollo/client';
 
 import NoteFeed from '../components/NoteFeed';
 import Button from '../components/Button';
-import { GET_NOTES } from '../gql/query';
+
+const GET_NOTES = gql`
+  query noteFeed($cursor: String) {
+    noteFeed(cursor: $cursor) {
+      cursor
+      hasNextPage
+      notes {
+        id
+        createdAt
+        content
+        favoriteCount
+        author {
+          username
+          id
+          avatar
+        }
+      }
+    }
+  }
+`;
 
 const Home = () => {
   // query hook
   const { data, loading, error, fetchMore } = useQuery(GET_NOTES);
+
   // if the data is loading, display a loading message
   if (loading) return <p>Loading...</p>;
   // if there is an error fetching the data, display an error message
@@ -17,6 +37,7 @@ const Home = () => {
   return (
     <React.Fragment>
       <NoteFeed notes={data.noteFeed.notes} />
+      {/* Only display the Load More button if hasNextPage is true */}
       {data.noteFeed.hasNextPage && (
         <Button
           onClick={() =>
