@@ -13,6 +13,8 @@ import Favorites from './favorites';
 import Note from './note';
 import SignUp from './signup';
 import SignIn from './signin';
+import NewNote from './new';
+import EditNote from './edit';
 
 const IS_LOGGED_IN = gql`
   {
@@ -21,7 +23,7 @@ const IS_LOGGED_IN = gql`
 `;
 
 // define our routes
-const Pages = props => {
+const Pages = () => {
   return (
     <Router>
       <Layout>
@@ -31,6 +33,8 @@ const Pages = props => {
         <Route path="/note/:id" component={Note} />
         <Route path="/signup" component={SignUp} />
         <Route path="/signin" component={SignIn} />
+        <PrivateRoute path="/new" component={NewNote} />
+        <PrivateRoute path="/edit/:id" component={EditNote} />
       </Layout>
     </Router>
   );

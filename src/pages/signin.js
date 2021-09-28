@@ -1,15 +1,10 @@
 import React, { useEffect } from 'react';
-import { useMutation, useApolloClient, gql } from '@apollo/client';
+import { useMutation, useApolloClient } from '@apollo/client';
 
 import UserForm from '../components/UserForm';
+import { SIGNIN_USER } from '../gql/mutation';
 
-const SIGNIN_USER = gql`
-  mutation signIn($email: String, $password: String!) {
-    signIn(email: $email, password: $password)
-  }
-`;
-
-const SignIn = ({ location, history }) => {
+const SignIn = props => {
   useEffect(() => {
     // update the document title
     document.title = 'Sign In — Notedly';
@@ -23,11 +18,7 @@ const SignIn = ({ location, history }) => {
       // update the local cache
       client.writeData({ data: { isLoggedIn: true } });
       // redirect the user to the homepage
-      if (location.state && location.state.from) {
-        history.push(`${location.state.from.pathname}`);
-      } else {
-        history.push('/');
-      }
+      props.history.push('/');
     }
   });
 
